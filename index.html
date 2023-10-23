@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pronóstico del Clima</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Pronóstico del Clima</h1>
+
+    <form id="weather-form">
+        <label for="city">Ciudad: </label>
+        <input type="text" id="city" placeholder="Ingresa una ciudad" required>
+        <button type="submit">Obtener Pronóstico</button>
+    </form>
+
+    <div id="weather-info">
+    </div>
+
+    <script>
+        const apiKey = '4143e8f76d1845e3ab65375061ac555a';
+
+        $('#weather-form').submit(function (event) {
+            event.preventDefault();
+
+            const city = $('#city').val();
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+            $.get(apiUrl, function (data) {
+                const description = data.weather[0].description;
+                const temperature = (data.main.temp - 273.15).toFixed(2);
+                const humidity = data.main.humidity;
+                const windSpeed = data.wind.speed;
+
+                const weatherInfo = `
+                    <p><strong>Ciudad:</strong> ${city}</p>
+                    <p><strong>Descripción:</strong> ${description}</p>
+                    <p><strong>Temperatura:</strong> ${temperature} °C</p>
+                    <p><strong>Humedad:</strong> ${humidity}%</p>
+                    <p><strong>Velocidad del Viento:</strong> ${windSpeed} m/s</p>
+                `;
+
+                $('#weather-info').html(weatherInfo);
+            });
+        });
+    </script>
+</body>
+</html>
